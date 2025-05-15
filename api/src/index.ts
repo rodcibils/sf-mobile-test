@@ -10,6 +10,9 @@ interface SeedResponse {
 const app = express();
 const PORT = 3000;
 
+// Middleware to parse JSON bodies
+app.use(express.json());
+
 let lastGeneratedSeed: SeedResponse | null = null;
 
 app.get('/seed', (_req, res) => {
@@ -30,9 +33,22 @@ app.get('/seed_test', (_req, res) => {
   // Generate and display QR code in terminal
   console.log('\nGenerated Seed QR Code:\n');
   qrcode.generate(seed, { small: true });
-  console.log(`\nExpires at: ${expiresAt}\n`);
+  console.log(`\nSeed: ${seed}`);
+  console.log(`Expires at: ${expiresAt}\n`);
 
   res.status(200).send(`Seed generated and QR code displayed in terminal. Expires at: ${expiresAt}`);
+});
+
+app.post('/validate', (req, res) => {
+  const { seed } = req.body;
+
+  console.log(`Received seed: ${seed}`);
+  const expiredAt = lastGeneratedSeed?.expires_at ? new Date(lastGeneratedSeed.expires_at).getTime() : undefined;
+  if (expiredAt !== undefined && Date.now() < expiredAt && seed === lastGeneratedSeed?.seed) {
+    res.status(200).send(`Seed is valid`);
+  } else {
+    res.status(400).send('Seed is invalid');
+  }
 });
 
 app.listen(PORT, () => {
