@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/rodcibils/sf-mobile-test#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "qrcode-terminal": "^0.12.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
