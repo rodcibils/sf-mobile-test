@@ -10,7 +10,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.rodcibils.sfmobiletest.ui.screen.HomeScreen
+import com.rodcibils.sfmobiletest.ui.screen.home.HomeScreen
 import com.rodcibils.sfmobiletest.ui.theme.SFMobileTestTheme
 
 class MainActivity : ComponentActivity() {

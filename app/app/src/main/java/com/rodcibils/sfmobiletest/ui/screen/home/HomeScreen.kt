@@ -1,4 +1,4 @@
-package com.rodcibils.sfmobiletest.ui.screen
+package com.rodcibils.sfmobiletest.ui.screen.home
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
