@@ -4,7 +4,10 @@
   "description": "Simple Node.js + Express backend for Superformula mobile coding challenge",
   "main": "index.js",
   "scripts": {
-    "test": "npm run test"
+    "test": "npm run test",
+    "dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",
