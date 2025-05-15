@@ -32,7 +32,10 @@ import com.rodcibils.sfmobiletest.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onNavigateToQRCode: () -> Unit,
+    onNavigateToScan: () -> Unit,
+) {
     var isExpanded by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -57,16 +60,18 @@ fun HomeScreen() {
                 verticalArrangement = Arrangement.Bottom,
                 modifier = Modifier.padding(bottom = 16.dp, end = 16.dp),
             ) {
-                HomeOption(isExpanded, stringResource(R.string.scan), onPress = {
-                    /**
-                     * TODO
-                     */
-                }, icon = Icons.Default.Search)
-                HomeOption(isExpanded, stringResource(R.string.qr_code), onPress = {
-                    /**
-                     * TODO
-                     */
-                }, icon = Icons.Default.Face)
+                HomeOption(
+                    isExpanded,
+                    stringResource(R.string.scan),
+                    onPress = onNavigateToScan,
+                    icon = Icons.Default.Search,
+                )
+                HomeOption(
+                    isExpanded,
+                    stringResource(R.string.qr_code),
+                    onPress = onNavigateToQRCode,
+                    icon = Icons.Default.Face,
+                )
                 FloatingActionButton(onClick = { isExpanded = !isExpanded }) {
                     Icon(Icons.Default.Add, contentDescription = "Add")
                 }
@@ -87,6 +92,6 @@ fun HomeScreen() {
 @Composable
 private fun HomeScreenPreview() {
     MaterialTheme {
-        HomeScreen()
+        HomeScreen({}, {})
     }
 }
