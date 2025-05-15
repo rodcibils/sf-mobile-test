@@ -1,16 +1,9 @@
 package com.rodcibils.sfmobiletest.ui.screen.home
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -60,36 +53,16 @@ fun HomeScreen() {
                 verticalArrangement = Arrangement.Bottom,
                 modifier = Modifier.padding(bottom = 16.dp, end = 16.dp),
             ) {
-                AnimatedVisibility(
-                    visible = isExpanded,
-                    enter = fadeIn() + slideInVertically(),
-                    exit = fadeOut() + slideOutVertically(),
-                ) {
-                    FloatingActionButton(
-                        onClick = { /* Handle QR Code click */ },
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                    ) {
-                        Text("QR Code")
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                AnimatedVisibility(
-                    visible = isExpanded,
-                    enter = fadeIn() + slideInVertically(),
-                    exit = fadeOut() + slideOutVertically(),
-                ) {
-                    FloatingActionButton(
-                        onClick = { /* Handle Scan click */ },
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                    ) {
-                        Text("Scan")
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
+                HomeOption(isExpanded, "QR Code", onPress = {
+                    /**
+                     * TODO
+                     */
+                })
+                HomeOption(isExpanded, "Scan", onPress = {
+                    /**
+                     * TODO
+                     */
+                })
                 FloatingActionButton(onClick = { isExpanded = !isExpanded }) {
                     Icon(Icons.Default.Add, contentDescription = "Add")
                 }
