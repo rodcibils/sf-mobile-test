@@ -42,7 +42,12 @@ android {
 
 val installGitHooks by tasks.registering(Copy::class) {
     val sourceHook = rootProject.file("scripts/git-hooks/pre-commit")
-    val targetHook = rootProject.file(".git/hooks/pre-commit")
+
+    /**
+     * Git repo root folder is one level above app's folder. On a regular app folder structure
+     * that wouldn't be the case
+     */
+    val targetHook = rootProject.file("../.git/hooks/pre-commit")
 
     from(sourceHook)
     into(targetHook.parentFile)
