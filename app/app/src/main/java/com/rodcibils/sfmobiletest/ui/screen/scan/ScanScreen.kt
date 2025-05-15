@@ -1,5 +1,6 @@
 package com.rodcibils.sfmobiletest.ui.screen.scan
 
+import ScanViewModel
 import android.Manifest
 import android.content.Intent
 import android.net.Uri
@@ -138,11 +139,37 @@ fun ScanScreen(
                     )
                 }
 
+                is ScanViewModel.UiState.Validating -> {
+                    ValidatingContent()
+                }
+
+                is ScanViewModel.UiState.ValidSeed -> {
+                    ResultContent(
+                        message =
+                            stringResource(
+                                id = R.string.valid_seed_message,
+                                (uiState as ScanViewModel.UiState.ValidSeed).seed,
+                            ),
+                        onReset = viewModel::resetState,
+                    )
+                }
+
+                is ScanViewModel.UiState.InvalidSeed -> {
+                    ResultContent(
+                        message =
+                            stringResource(
+                                id = R.string.invalid_seed_message,
+                                (uiState as ScanViewModel.UiState.InvalidSeed).seed,
+                            ),
+                        onReset = viewModel::resetState,
+                    )
+                }
+
                 else -> {
+                    // Default scanning screen
                     Box(modifier = Modifier.fillMaxSize()) {
                         AndroidView(factory = { ctx ->
                             val previewView = PreviewView(ctx)
-
                             val preview =
                                 androidx.camera.core.Preview.Builder().build().apply {
                                     surfaceProvider = previewView.surfaceProvider
@@ -151,11 +178,11 @@ fun ScanScreen(
                             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
                             val imageAnalyzer =
-                                @Suppress("ktlint:standard:max-line-length")
                                 ImageAnalysis.Builder()
                                     .setBackpressureStrategy(
                                         ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST,
-                                    ).build().also {
+                                    )
+                                    .build().also {
                                         it.setAnalyzer(
                                             ContextCompat.getMainExecutor(ctx),
                                         ) { imageProxy ->
@@ -170,18 +197,20 @@ fun ScanScreen(
                                                     .addOnSuccessListener { barcodes ->
                                                         barcodes.firstOrNull()?.rawValue?.let {
                                                                 value ->
-                                                            @Suppress(
-                                                                "ktlint:standard:max-line-length",
-                                                            )
                                                             val current =
+                                                                @Suppress(
+                                                                    "ktlint:standard:max-line-length",
+                                                                )
                                                                 (uiState as? ScanViewModel.UiState.Scanning)?.lastCode
                                                             if (value != current) {
                                                                 viewModel.onCodeScanned(value)
                                                             }
                                                         }
                                                     }.addOnFailureListener { error ->
-                                                        @Suppress("ktlint:standard:max-line-length")
                                                         viewModel.onError(
+                                                            @Suppress(
+                                                                "ktlint:standard:max-line-length",
+                                                            )
                                                             "Scanning failed: ${error.localizedMessage}",
                                                         )
                                                     }.addOnCompleteListener {

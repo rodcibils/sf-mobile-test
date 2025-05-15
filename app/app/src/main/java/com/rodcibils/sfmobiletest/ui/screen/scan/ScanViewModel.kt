@@ -1,31 +1,49 @@
-package com.rodcibils.sfmobiletest.ui.screen.scan
-
 import android.content.pm.PackageManager
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.rodcibils.sfmobiletest.repo.ScanRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
-class ScanViewModel : ViewModel() {
-    sealed class UiState {
-        data object Idle : UiState()
-
-        data class Scanning(val lastCode: String?) : UiState()
-
-        data class Error(val message: String) : UiState()
-
-        data object PermissionDenied : UiState()
-    }
-
+class ScanViewModel(
+    /**
+     * TODO: replace with DI in real app
+     */
+    private val repository: ScanRepository = ScanRepository(),
+) : ViewModel() {
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
     val uiState: StateFlow<UiState> get() = _uiState
+
     private val _hasRequestedPermission = mutableStateOf(false)
     val hasRequestedPermission: State<Boolean> get() = _hasRequestedPermission
 
     fun onCodeScanned(code: String) {
-        _uiState.value = UiState.Scanning(lastCode = code)
+        _uiState.value = UiState.Validating
+        validateSeed(code)
+    }
+
+    private fun validateSeed(seed: String) {
+        viewModelScope.launch {
+            try {
+                val isValid = repository.isSeedValid(seed)
+                _uiState.value =
+                    if (isValid) {
+                        UiState.ValidSeed(seed)
+                    } else {
+                        UiState.InvalidSeed(seed)
+                    }
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error("Validation error: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    fun resetState() {
+        _uiState.value = UiState.Idle
     }
 
     fun onPermissionDenied() {
@@ -34,10 +52,6 @@ class ScanViewModel : ViewModel() {
 
     fun onError(message: String) {
         _uiState.value = UiState.Error(message)
-    }
-
-    fun resetState() {
-        _uiState.value = UiState.Idle
     }
 
     fun onPermissionRequested() {
@@ -56,5 +70,21 @@ class ScanViewModel : ViewModel() {
         } else {
             _uiState.value = UiState.PermissionDenied
         }
+    }
+
+    sealed class UiState {
+        data object Idle : UiState()
+
+        data object Validating : UiState()
+
+        data class ValidSeed(val seed: String) : UiState()
+
+        data class InvalidSeed(val seed: String) : UiState()
+
+        data class Scanning(val lastCode: String?) : UiState()
+
+        data class Error(val message: String) : UiState()
+
+        data object PermissionDenied : UiState()
     }
 }
