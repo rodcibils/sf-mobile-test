@@ -2,7 +2,7 @@
   "name": "sf-mobile-test-backend",
   "version": "1.0.0",
   "description": "Simple Node.js + Express backend for Superformula mobile coding challenge",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "npm run test",
     "dev": "ts-node src/index.ts",

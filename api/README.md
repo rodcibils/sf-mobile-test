@@ -1,4 +1,3 @@
-```
 # Seed API
 
 A minimal Node.js + TypeScript REST API that exposes a single endpoint to generate a seed value, suitable for use with QR code systems.
@@ -60,7 +59,7 @@ components:
           type: string
           example: d43397d129c3de9e4b6c3974c1c16d1f
         expires_at:
-          type: dateTime
+          type: string
           description: ISO date-time
           example: '1979-11-12T13:10:42.24Z'
 ```
@@ -151,4 +150,3 @@ choco install jq
 ## 📄 License
 
 MIT
-```
