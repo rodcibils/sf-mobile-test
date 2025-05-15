@@ -1,11 +1,32 @@
 package com.rodcibils.sfmobiletest.ui.screen
 
-import androidx.compose.animation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,31 +42,32 @@ fun HomeScreen() {
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                        Text(
-                            text = "Home",
-                            fontSize = 20.sp,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                        )
+                    Text(
+                        text = "Home",
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                    ),
             )
         },
         floatingActionButton = {
             Column(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.Bottom,
-                modifier = Modifier.padding(bottom = 16.dp, end = 16.dp)
+                modifier = Modifier.padding(bottom = 16.dp, end = 16.dp),
             ) {
                 AnimatedVisibility(
                     visible = isExpanded,
                     enter = fadeIn() + slideInVertically(),
-                    exit = fadeOut() + slideOutVertically()
+                    exit = fadeOut() + slideOutVertically(),
                 ) {
                     FloatingActionButton(
                         onClick = { /* Handle QR Code click */ },
-                        containerColor = MaterialTheme.colorScheme.secondary
+                        containerColor = MaterialTheme.colorScheme.secondary,
                     ) {
                         Text("QR Code")
                     }
@@ -56,11 +78,11 @@ fun HomeScreen() {
                 AnimatedVisibility(
                     visible = isExpanded,
                     enter = fadeIn() + slideInVertically(),
-                    exit = fadeOut() + slideOutVertically()
+                    exit = fadeOut() + slideOutVertically(),
                 ) {
                     FloatingActionButton(
                         onClick = { /* Handle Scan click */ },
-                        containerColor = MaterialTheme.colorScheme.secondary
+                        containerColor = MaterialTheme.colorScheme.secondary,
                     ) {
                         Text("Scan")
                     }
@@ -74,13 +96,13 @@ fun HomeScreen() {
             }
         },
         content = { innerPadding ->
-            // Empty background that takes the rest of the screen
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
             )
-        }
+        },
     )
 }
 
