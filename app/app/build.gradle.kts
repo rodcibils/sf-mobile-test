@@ -82,6 +82,7 @@ dependencies {
     implementation(libs.camerax.view)
     implementation(libs.barcode.scanning)
     implementation(libs.lifecycle.process)
+    implementation(libs.lifecycle.viewmodel.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
