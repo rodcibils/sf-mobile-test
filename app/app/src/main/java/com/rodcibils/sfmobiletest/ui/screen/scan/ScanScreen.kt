@@ -98,11 +98,21 @@ fun ScanScreen(
 
     val uiState by viewModel.uiState.collectAsState()
 
-    // Show Toast when a code is scanned
     LaunchedEffect(uiState) {
-        if (uiState is ScanViewModel.UiState.Scanning) {
-            val code = (uiState as ScanViewModel.UiState.Scanning).lastCode
-            Toast.makeText(context, "QR Code read: $code", Toast.LENGTH_SHORT).show()
+        when (uiState) {
+            is ScanViewModel.UiState.Scanning -> {
+                val code = (uiState as ScanViewModel.UiState.Scanning).lastCode
+                Toast.makeText(context, "QR Code read: $code", Toast.LENGTH_SHORT).show()
+            }
+            is ScanViewModel.UiState.Error -> {
+                val message = (uiState as ScanViewModel.UiState.Error).message
+                Toast.makeText(context, "Error: $message", Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                /**
+                 * Do nothing
+                 */
+            }
         }
     }
 
@@ -163,14 +173,20 @@ fun ScanScreen(
                                         barcodeScanner.process(inputImage)
                                             .addOnSuccessListener { barcodes ->
                                                 barcodes.firstOrNull()?.rawValue?.let { value ->
-                                                    val current =
-                                                        @Suppress("ktlint:standard:max-line-length")
-                                                        (uiState as? ScanViewModel.UiState.Scanning)?.lastCode
+                                                    @Suppress("ktlint:standard:max-line-length")
+                                                    val current = (uiState as? ScanViewModel.UiState.Scanning)?.lastCode
                                                     if (value != current) {
                                                         viewModel.onCodeScanned(value)
                                                     }
                                                 }
-                                            }.addOnCompleteListener {
+                                            }
+                                            .addOnFailureListener { error ->
+                                                @Suppress("ktlint:standard:max-line-length")
+                                                viewModel.onError(
+                                                    "Scanning failed: ${error.localizedMessage}",
+                                                )
+                                            }
+                                            .addOnCompleteListener {
                                                 imageProxy.close()
                                             }
                                     } else {
@@ -191,6 +207,7 @@ fun ScanScreen(
                                 )
                             } catch (e: Exception) {
                                 Log.e("ScanScreen", "Camera binding failed", e)
+                                viewModel.onError("Camera binding failed: ${e.localizedMessage}")
                             }
                         }, ContextCompat.getMainExecutor(ctx))
 
