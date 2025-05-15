@@ -1,0 +1,16 @@
+#!/bin/bash
+# Run ktlint format and check before every commit
+
+# Format the code first
+./gradlew ktlintFormat
+
+# Then run lint check
+./gradlew ktlintCheck
+
+# If lint check fails, cancel commit
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ ktlintCheck failed. Please fix lint errors before committing."
+  exit 1
+fi
+

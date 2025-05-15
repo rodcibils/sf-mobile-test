@@ -40,8 +40,28 @@ android {
     }
 }
 
-dependencies {
+val installGitHooks by tasks.registering(Copy::class) {
+    val sourceHook = rootProject.file("scripts/git-hooks/pre-commit")
+    val targetHook = rootProject.file(".git/hooks/pre-commit")
 
+    from(sourceHook)
+    into(targetHook.parentFile)
+    rename { "pre-commit" }
+
+    doLast {
+        targetHook.setExecutable(true)
+        println("✅ Git pre-commit hook installed from scripts/git-hooks/pre-commit")
+    }
+}
+
+// Attach to Android build lifecycle
+afterEvaluate {
+    tasks.named("preBuild").configure {
+        dependsOn(installGitHooks)
+    }
+}
+
+dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
