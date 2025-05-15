@@ -3,4 +3,7 @@
     <string name="qr_code">QR Code</string>
     <string name="scan">Scan</string>
     <string name="home">Home</string>
+    <string name="camera_permission_msg">We need camera permissions in order to scan a QR Code</string>
+    <string name="grant_permission">Grant permission</string>
+    <string name="open_settings">Open Settings</string>
 </resources>
