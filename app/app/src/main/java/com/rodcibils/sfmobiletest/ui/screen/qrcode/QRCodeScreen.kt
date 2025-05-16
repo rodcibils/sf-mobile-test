@@ -113,6 +113,7 @@ fun QRCodeScreen(
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.error,
                             modifier = Modifier.padding(16.dp),
+                            textAlign = TextAlign.Center,
                         )
                         Button(onClick = {
                             lifecycleOwner.lifecycleScope.launch {
