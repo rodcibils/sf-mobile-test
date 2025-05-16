@@ -104,4 +104,5 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(libs.mockk)
     testImplementation(libs.turbine)
+    testImplementation(libs.kotlin.test)
 }

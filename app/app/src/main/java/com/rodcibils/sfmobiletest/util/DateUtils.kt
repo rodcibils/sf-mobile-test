@@ -108,13 +108,9 @@ object DateUtils {
      * fails.
      */
     private fun parseIsoToMillis(iso: String): Long {
-        return try {
-            val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
-            formatter.timeZone = TimeZone.getTimeZone("UTC")
-            formatter.parse(iso)?.time ?: 0L
-        } catch (e: Exception) {
-            0L
-        }
+        val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+        formatter.timeZone = TimeZone.getTimeZone("UTC")
+        return formatter.parse(iso)?.time ?: -1L
     }
 
     /**
