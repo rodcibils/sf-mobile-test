@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,10 +35,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Composable
-fun QRCodeScreen(
-    onBack: (() -> Unit)? = null,
-    viewModel: QRCodeViewModel = viewModel(),
-) {
+fun QRCodeScreen(onBack: (() -> Unit)? = null) {
+    val context = LocalContext.current
+    val viewModel: QRCodeViewModel =
+        viewModel(
+            factory = QRCodeViewModelFactory(context.applicationContext),
+        )
     val uiState by viewModel.uiState.collectAsState()
     val qrSeed = (uiState as? QRCodeViewModel.UiState.Success)?.qrCodeSeed
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -84,7 +87,7 @@ fun QRCodeScreen(
 
     Scaffold(
         topBar = {
-            CustomTopAppBar(stringResource(R.string.scan), onBackPressed = onBack)
+            CustomTopAppBar(stringResource(R.string.qr_code), onBackPressed = onBack)
         },
     ) { innerPadding ->
         Box(
@@ -133,8 +136,9 @@ fun QRCodeScreen(
                         }
                         ExpirationCountdown(
                             expiresAt =
-                                (uiState as QRCodeViewModel.UiState.Success).qrCodeSeed
-                                    .expiresAt,
+                                (
+                                    uiState as QRCodeViewModel.UiState.Success
+                                ).qrCodeSeed.expiresAt,
                             modifier = Modifier.padding(top = 16.dp),
                         )
                     }

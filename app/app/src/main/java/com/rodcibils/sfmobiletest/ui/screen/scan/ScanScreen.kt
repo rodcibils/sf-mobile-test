@@ -41,16 +41,16 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.rodcibils.sfmobiletest.R
 import com.rodcibils.sfmobiletest.ui.common.CustomTopAppBar
-import com.rodcibils.sfmobiletest.ui.screen.qrcode.ScanViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalGetImage::class)
 @Composable
-fun ScanScreen(
-    onBack: (() -> Unit)? = null,
-    viewModel: ScanViewModel = viewModel(),
-) {
+fun ScanScreen(onBack: (() -> Unit)? = null) {
     val context = LocalContext.current
+    val viewModel: ScanViewModel =
+        viewModel(
+            factory = ScanViewModelFactory(context.applicationContext),
+        )
     val lifecycleOwner = LocalLifecycleOwner.current
 
     DisposableEffect(Unit) {
@@ -180,54 +180,50 @@ fun ScanScreen(
                             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
                             val imageAnalyzer =
-                                ImageAnalysis.Builder()
-                                    .setBackpressureStrategy(
-                                        ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST,
-                                    )
-                                    .build().also {
-                                        it.setAnalyzer(
-                                            ContextCompat.getMainExecutor(ctx),
-                                        ) { imageProxy ->
-                                            val mediaImage = imageProxy.image
-                                            if (mediaImage != null) {
-                                                val inputImage =
-                                                    InputImage.fromMediaImage(
-                                                        mediaImage,
-                                                        imageProxy.imageInfo.rotationDegrees,
-                                                    )
-                                                barcodeScanner.process(inputImage)
-                                                    .addOnSuccessListener { barcodes ->
-                                                        barcodes.firstOrNull()?.rawValue?.let {
-                                                                value ->
-                                                            val current =
-                                                                @Suppress(
-                                                                    "ktlint:standard:max-line-length",
-                                                                )
-                                                                (uiState as? ScanViewModel.UiState.Scanning)?.lastCode
-                                                            if (value != current) {
-                                                                @Suppress(
-                                                                    "ktlint:standard:max-line-length",
-                                                                )
-                                                                lifecycleOwner.lifecycleScope.launch {
-                                                                    viewModel.onCodeScanned(value)
-                                                                }
-                                                            }
-                                                        }
-                                                    }.addOnFailureListener { error ->
-                                                        viewModel.onError(
+                                ImageAnalysis.Builder().setBackpressureStrategy(
+                                    ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST,
+                                ).build().also {
+                                    it.setAnalyzer(
+                                        ContextCompat.getMainExecutor(ctx),
+                                    ) { imageProxy ->
+                                        val mediaImage = imageProxy.image
+                                        if (mediaImage != null) {
+                                            val inputImage =
+                                                InputImage.fromMediaImage(
+                                                    mediaImage,
+                                                    imageProxy.imageInfo.rotationDegrees,
+                                                )
+                                            barcodeScanner.process(inputImage)
+                                                .addOnSuccessListener { barcodes ->
+                                                    barcodes.firstOrNull()?.rawValue?.let { value ->
+                                                        val current =
                                                             @Suppress(
                                                                 "ktlint:standard:max-line-length",
                                                             )
-                                                            "Scanning failed: ${error.localizedMessage}",
-                                                        )
-                                                    }.addOnCompleteListener {
-                                                        imageProxy.close()
+                                                            (uiState as? ScanViewModel.UiState.Scanning)?.lastCode
+                                                        if (value != current) {
+                                                            @Suppress(
+                                                                "ktlint:standard:max-line-length",
+                                                            )
+                                                            lifecycleOwner.lifecycleScope.launch {
+                                                                viewModel.onCodeScanned(value)
+                                                            }
+                                                        }
                                                     }
-                                            } else {
-                                                imageProxy.close()
-                                            }
+                                                }.addOnFailureListener { error ->
+                                                    viewModel.onError(
+                                                        @Suppress(
+                                                            "ktlint:standard:max-line-length",
+                                                        ) "Scanning failed: ${error.localizedMessage}",
+                                                    )
+                                                }.addOnCompleteListener {
+                                                    imageProxy.close()
+                                                }
+                                        } else {
+                                            imageProxy.close()
                                         }
                                     }
+                                }
 
                             cameraProviderFuture.addListener({
                                 val cameraProvider = cameraProviderFuture.get()
