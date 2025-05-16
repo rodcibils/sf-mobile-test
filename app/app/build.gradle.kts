@@ -42,21 +42,22 @@ android {
 }
 
 val installGitHooks by tasks.registering(Copy::class) {
-    val sourceHook = rootProject.file("scripts/git-hooks/pre-commit")
+    val hooks = listOf("pre-commit", "pre-push")
 
-    /**
-     * Git repo root folder is one level above app's folder. On a regular app folder structure
-     * that wouldn't be the case
-     */
-    val targetHook = rootProject.file("../.git/hooks/pre-commit")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    from(sourceHook)
-    into(targetHook.parentFile)
-    rename { "pre-commit" }
+    hooks.forEach { hookName ->
+        val sourceHook = rootProject.file("scripts/git-hooks/$hookName")
+        val targetHook = rootProject.file("../.git/hooks/$hookName")
 
-    doLast {
-        targetHook.setExecutable(true)
-        println("✅ Git pre-commit hook installed from scripts/git-hooks/pre-commit")
+        from(sourceHook)
+        into(targetHook.parentFile)
+        rename { hookName }
+
+        doLast {
+            targetHook.setExecutable(true)
+            println("✅ Git $hookName hook installed from scripts/git-hooks/$hookName")
+        }
     }
 }
 

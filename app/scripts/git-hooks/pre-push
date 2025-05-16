@@ -1,0 +1,20 @@
+#!/bin/bash
+
+echo "🔍 Running ktlint..."
+./gradlew ktlintCheck
+
+if [ $? -ne 0 ]; then
+  echo "❌ ktlint failed. Please fix formatting before pushing."
+  exit 1
+fi
+
+echo "🧪 Running unit tests..."
+./gradlew testDebugUnitTest
+
+if [ $? -ne 0 ]; then
+  echo "❌ Unit tests failed. Please fix them before pushing."
+  exit 1
+fi
+
+echo "✅ All checks passed. Proceeding with push."
+exit 0
