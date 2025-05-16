@@ -15,6 +15,7 @@ lifecycle = "2.9.0"
 ktor = "2.3.6"
 kotlinx-serialization = "1.6.0"
 zxing-core = "3.5.2"
+androidx-security = "1.1.0-alpha06"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,6 +46,7 @@ ktor-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation",
 ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 zxing-core = { module = "com.google.zxing:core", version.ref = "zxing-core" }
+androidx-security = { module = "androidx.security:security-crypto", version.ref = "androidx-security" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

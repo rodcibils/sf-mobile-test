@@ -90,6 +90,7 @@ dependencies {
     implementation(libs.ktor.serialization.json)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.zxing.core)
+    implementation(libs.androidx.security)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

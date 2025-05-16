@@ -135,4 +135,23 @@ object DateUtils {
             -1L // treat parse errors as already expired
         }
     }
+
+    /**
+     * Returns true if the given ISO 8601 expiration date is in the past (i.e., expired).
+     *
+     * @param expiresAt ISO 8601 timestamp (e.g. "2025-05-16T12:51:36.774Z")
+     * @param nowMillis Optional reference time in milliseconds (defaults to current system time).
+     * @return `true` if the expiration time is in the past, `false` otherwise.
+     */
+    fun isExpired(
+        expiresAt: String,
+        nowMillis: Long = System.currentTimeMillis(),
+    ): Boolean {
+        return try {
+            val expirationMillis = parseIsoToMillis(expiresAt)
+            expirationMillis < nowMillis
+        } catch (e: Exception) {
+            false // if the date is invalid, treat it as not expired (or adjust if needed)
+        }
+    }
 }

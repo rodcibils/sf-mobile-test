@@ -1,6 +1,9 @@
 package com.rodcibils.sfmobiletest.api
 
+import com.rodcibils.sfmobiletest.model.QRCodeSeed
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
@@ -20,9 +23,11 @@ class RemoteSeedDataSource(
     private data class SeedRequest(val seed: String)
 
     /**
-     * @param seed Seed scanned from QR with camera, that we want to know if its a valid seed or not
-     * @return true if the seed is valid on backend, false if otherwise.
-     * @throws Exception if there is any network error.
+     * Validates a QR seed against the backend.
+     *
+     * @param seed The seed string scanned from a QR code.
+     * @return `true` if the seed is valid, `false` if invalid.
+     * @throws Exception if there is a network error or an unexpected response.
      */
     suspend fun isSeedValid(seed: String): Boolean {
         val response: HttpResponse =
@@ -38,5 +43,15 @@ class RemoteSeedDataSource(
                 "Unexpected response: ${response.status.value} - ${response.bodyAsText()}",
             )
         }
+    }
+
+    /**
+     * Fetches a fresh [QRCodeSeed] from the backend.
+     *
+     * @return A [QRCodeSeed] object containing the seed and its expiration.
+     * @throws Exception if the network call fails or the response cannot be parsed.
+     */
+    suspend fun getSeed(): QRCodeSeed {
+        return client.get("${BASE_URL}/seed").body()
     }
 }
