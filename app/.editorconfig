@@ -5,7 +5,8 @@ indent_size = 4
 continuation_indent_size = 4
 max_line_length = 100
 
-# Standard ktlint rules ktlint_standard_function-naming = enabled
-
+# Rule disabled for ui folder in order to stop ktlint complaining about Jetpack Compose views
+# being functions starting with capital letters
+# TODO: replace with a linter with better Jetpack Compose support
 [app/src/main/java/com/rodcibils/sfmobiletest/ui/**.kt]
 ktlint_standard_function-naming = disabled
