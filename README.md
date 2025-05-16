@@ -1,6 +1,18 @@
 # Superformula Mobile Developer Coding Test
 
-Make sure you read **all** of this document carefully, and follow the guidelines in it.
+---
+
+📄 **Implementation Details**
+
+The full documentation of the implementation can be found in the following dedicated READMEs:
+
+- [Android App Documentation](https://github.com/rodcibils/sf-mobile-test/blob/master/app/README.md)
+  Includes build steps, architecture overview, DI setup, testing strategy, and known limitations.
+
+- [Node.js API Documentation](https://github.com/rodcibils/sf-mobile-test/blob/master/api/README.md)
+  Details local server setup, endpoint definitions, OpenAPI schema, and testing instructions.
+
+---
 
 ## Requirements
 
@@ -29,4 +41,5 @@ Fork this repo and send us a pull request when you think you are done. There is 
 Just create a new issue in this repo and we will respond and get back to you quickly.
 
 ## Review
-The coding challenge is a take-home test upon which we'll be conducting a thorough code review once complete. The review will consist of meeting some more of our mobile engineers and giving a review of the solution you have designed. Please be prepared to share your screen and run/demo the application to the group. During this process, the engineers will be asking questions. 
+
+The coding challenge is a take-home test upon which we'll be conducting a thorough code review once complete. The review will consist of meeting some more of our mobile engineers and giving a review of the solution you have designed. Please be prepared to share your screen and run/demo the application to the group. During this process, the engineers will be asking questions.
