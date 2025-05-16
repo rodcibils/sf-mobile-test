@@ -273,6 +273,15 @@ choco install jq
 
 ---
 
+## 🚧 Known TODOs
+
+- Linting rules and static analysis are not configured for this API.
+- Unit and integration tests are not implemented.
+- As the primary focus of the challenge was the Android application, the API was kept minimal and focused on supporting development and testing of the mobile app.
+- In a production context, adding tests, proper error handling, and CI integration would be required.
+
+---
+
 ## 📄 License
 
 MIT
