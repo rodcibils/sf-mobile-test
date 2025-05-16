@@ -21,6 +21,9 @@ app.get('/seed', (_req, res) => {
   const response: SeedResponse = { seed, expires_at: expiresAt };
   console.log(`Generated Seed: ${JSON.stringify(response)}`);
 
+  // Save to local memory
+  lastGeneratedSeed = response;
+
   res.status(200).json(response);
 });
 
