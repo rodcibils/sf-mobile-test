@@ -205,6 +205,9 @@ fun ScanScreen(
                                                                 )
                                                                 (uiState as? ScanViewModel.UiState.Scanning)?.lastCode
                                                             if (value != current) {
+                                                                @Suppress(
+                                                                    "ktlint:standard:max-line-length",
+                                                                )
                                                                 lifecycleOwner.lifecycleScope.launch {
                                                                     viewModel.onCodeScanned(value)
                                                                 }

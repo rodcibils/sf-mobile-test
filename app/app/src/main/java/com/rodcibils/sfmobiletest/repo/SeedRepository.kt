@@ -1,6 +1,7 @@
 package com.rodcibils.sfmobiletest.repo
 
 import com.rodcibils.sfmobiletest.api.RemoteSeedDataSource
+import kotlinx.coroutines.delay
 
 class SeedRepository(
     /**
@@ -14,4 +15,11 @@ class SeedRepository(
      * @throws Exception if there is any network error.
      */
     suspend fun isSeedValid(seed: String): Boolean = remoteSeedDataSource.isSeedValid(seed)
+
+    suspend fun retrieveSeed(): String {
+        delay(2000)
+        // Simulate error or return a hardcoded seed
+        // throw RuntimeException("Server not responding")
+        return "SOME-GENERATED-SEED-123"
+    }
 }

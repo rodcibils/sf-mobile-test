@@ -29,11 +29,12 @@ class ScanViewModel(
     private suspend fun validateSeed(seed: String) {
         try {
             val isValid = repository.isSeedValid(seed)
-            _uiState.value = if (isValid) {
-                UiState.ValidSeed(seed)
-            } else {
-                UiState.InvalidSeed(seed)
-            }
+            _uiState.value =
+                if (isValid) {
+                    UiState.ValidSeed(seed)
+                } else {
+                    UiState.InvalidSeed(seed)
+                }
         } catch (e: Exception) {
             _uiState.value = UiState.Error("Validation error: ${e.localizedMessage}")
         }
@@ -56,10 +57,11 @@ class ScanViewModel(
     }
 
     fun checkCameraPermission(context: android.content.Context) {
-        val granted = ContextCompat.checkSelfPermission(
-            context,
-            android.Manifest.permission.CAMERA,
-        ) == PackageManager.PERMISSION_GRANTED
+        val granted =
+            ContextCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.CAMERA,
+            ) == PackageManager.PERMISSION_GRANTED
 
         if (granted) {
             resetState()
