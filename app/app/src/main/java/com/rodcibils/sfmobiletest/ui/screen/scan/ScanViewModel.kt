@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rodcibils.sfmobiletest.repo.ScanRepository
+import com.rodcibils.sfmobiletest.repo.SeedRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -13,7 +13,7 @@ class ScanViewModel(
     /**
      * TODO: replace with DI in real app
      */
-    private val repository: ScanRepository = ScanRepository(),
+    private val repository: SeedRepository = SeedRepository(),
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
     val uiState: StateFlow<UiState> get() = _uiState

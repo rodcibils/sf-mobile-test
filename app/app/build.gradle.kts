@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ktlint)
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 android {
@@ -83,6 +84,11 @@ dependencies {
     implementation(libs.barcode.scanning)
     implementation(libs.lifecycle.process)
     implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.ktor.core)
+    implementation(libs.ktor.okhttp)
+    implementation(libs.ktor.content.negotiation)
+    implementation(libs.ktor.serialization.json)
+    implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
