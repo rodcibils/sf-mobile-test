@@ -41,23 +41,18 @@ android {
     }
 }
 
-val installGitHooks by tasks.registering(Copy::class) {
+val installGitHooks by tasks.registering {
     val hooks = listOf("pre-commit", "pre-push")
-
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     hooks.forEach { hookName ->
         val sourceHook = rootProject.file("scripts/git-hooks/$hookName")
         val targetHook = rootProject.file("../.git/hooks/$hookName")
-
-        from(sourceHook)
-        into(targetHook.parentFile)
-        rename { hookName }
-
-        doLast {
-            targetHook.setExecutable(true)
-            println("✅ Git $hookName hook installed from scripts/git-hooks/$hookName")
-        }
+        sourceHook.copyTo(
+            target = targetHook,
+            overwrite = true,
+        )
+        targetHook.setExecutable(true)
+        println("✅ Git $hookName hook installed from scripts/git-hooks/$hookName")
     }
 }
 
