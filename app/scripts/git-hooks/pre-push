@@ -1,4 +1,11 @@
 #!/bin/bash
+echo "✅ [pre-push] Hook is running"
+
+# Navigate into the app module where the Gradle build is
+cd app || {
+  echo "❌ Failed to enter app/ directory"
+  exit 1
+}
 
 echo "🔍 Running ktlint..."
 ./gradlew ktlintCheck
