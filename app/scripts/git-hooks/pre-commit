@@ -1,0 +1,17 @@
+#!/bin/bash
+echo "✅ [pre-commit] Hook is running"
+
+# Navigate into the app module where the Gradle build is
+cd app || {
+  echo "❌ Failed to enter app/ directory"
+  exit 1
+}
+
+# Run ktlintFormat and ktlintCheck
+./gradlew ktlintFormat ktlintCheck
+
+# Exit with failure if lint check fails
+if [ $? -ne 0 ]; then
+  echo "❌ ktlintCheck failed. Commit aborted."
+  exit 1
+fi

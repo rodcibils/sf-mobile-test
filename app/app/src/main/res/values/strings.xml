@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">SFMobileTest</string>
+    <string name="qr_code">QR Code</string>
+    <string name="scan">Scan</string>
+    <string name="home">Home</string>
+    <string name="camera_permission_msg">We need camera permissions in order to scan a QR Code</string>
+    <string name="grant_permission">Grant permission</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="reset_scanner">Reset Scanner</string>
+    <string name="validating">Validating, please wait…</string>
+    <string name="valid_seed_message">✅ Seed is valid: %1$s</string>
+    <string name="invalid_seed_message">❌ Invalid seed: %1$s</string>
+    <string name="loading">Loading, please wait…</string>
+    <string name="retry">Retry</string>
+    <string name="countdown">%1$s…</string>
+</resources>
