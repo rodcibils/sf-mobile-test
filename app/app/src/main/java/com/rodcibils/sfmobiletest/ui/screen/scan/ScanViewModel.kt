@@ -1,13 +1,13 @@
+package com.rodcibils.sfmobiletest.ui.screen.qrcode
+
 import android.content.pm.PackageManager
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.rodcibils.sfmobiletest.repo.SeedRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 class ScanViewModel(
     /**
@@ -21,24 +21,21 @@ class ScanViewModel(
     private val _hasRequestedPermission = mutableStateOf(false)
     val hasRequestedPermission: State<Boolean> get() = _hasRequestedPermission
 
-    fun onCodeScanned(code: String) {
+    suspend fun onCodeScanned(code: String) {
         _uiState.value = UiState.Validating
         validateSeed(code)
     }
 
-    private fun validateSeed(seed: String) {
-        viewModelScope.launch {
-            try {
-                val isValid = repository.isSeedValid(seed)
-                _uiState.value =
-                    if (isValid) {
-                        UiState.ValidSeed(seed)
-                    } else {
-                        UiState.InvalidSeed(seed)
-                    }
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error("Validation error: ${e.localizedMessage}")
+    private suspend fun validateSeed(seed: String) {
+        try {
+            val isValid = repository.isSeedValid(seed)
+            _uiState.value = if (isValid) {
+                UiState.ValidSeed(seed)
+            } else {
+                UiState.InvalidSeed(seed)
             }
+        } catch (e: Exception) {
+            _uiState.value = UiState.Error("Validation error: ${e.localizedMessage}")
         }
     }
 
@@ -59,11 +56,10 @@ class ScanViewModel(
     }
 
     fun checkCameraPermission(context: android.content.Context) {
-        val granted =
-            ContextCompat.checkSelfPermission(
-                context,
-                android.Manifest.permission.CAMERA,
-            ) == PackageManager.PERMISSION_GRANTED
+        val granted = ContextCompat.checkSelfPermission(
+            context,
+            android.Manifest.permission.CAMERA,
+        ) == PackageManager.PERMISSION_GRANTED
 
         if (granted) {
             resetState()

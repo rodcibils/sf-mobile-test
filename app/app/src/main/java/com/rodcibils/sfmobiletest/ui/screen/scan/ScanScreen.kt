@@ -1,6 +1,5 @@
 package com.rodcibils.sfmobiletest.ui.screen.scan
 
-import ScanViewModel
 import android.Manifest
 import android.content.Intent
 import android.net.Uri
@@ -34,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
@@ -41,6 +41,8 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.rodcibils.sfmobiletest.R
 import com.rodcibils.sfmobiletest.ui.common.CustomTopAppBar
+import com.rodcibils.sfmobiletest.ui.screen.qrcode.ScanViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalGetImage::class)
 @Composable
@@ -203,7 +205,9 @@ fun ScanScreen(
                                                                 )
                                                                 (uiState as? ScanViewModel.UiState.Scanning)?.lastCode
                                                             if (value != current) {
-                                                                viewModel.onCodeScanned(value)
+                                                                lifecycleOwner.lifecycleScope.launch {
+                                                                    viewModel.onCodeScanned(value)
+                                                                }
                                                             }
                                                         }
                                                     }.addOnFailureListener { error ->
