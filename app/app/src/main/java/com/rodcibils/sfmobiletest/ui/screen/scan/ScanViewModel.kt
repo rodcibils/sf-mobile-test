@@ -6,30 +6,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.rodcibils.sfmobiletest.repo.SeedRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-/**
- * TODO: remove when DI is implemented
- */
-class ScanViewModelFactory(
-    private val context: Context,
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ScanViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return ScanViewModel(SeedRepository(context)) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
-
 class ScanViewModel(
-    /**
-     * TODO: replace with DI
-     */
     private val repository: SeedRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
@@ -73,7 +54,7 @@ class ScanViewModel(
         _hasRequestedPermission.value = true
     }
 
-    fun checkCameraPermission(context: android.content.Context) {
+    fun checkCameraPermission(context: Context) {
         val granted =
             ContextCompat.checkSelfPermission(
                 context,

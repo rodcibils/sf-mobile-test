@@ -34,7 +34,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -42,15 +41,15 @@ import com.google.mlkit.vision.common.InputImage
 import com.rodcibils.sfmobiletest.R
 import com.rodcibils.sfmobiletest.ui.common.CustomTopAppBar
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalGetImage::class)
 @Composable
-fun ScanScreen(onBack: (() -> Unit)? = null) {
+fun ScanScreen(
+    onBack: (() -> Unit)? = null,
+    viewModel: ScanViewModel = koinViewModel(),
+) {
     val context = LocalContext.current
-    val viewModel: ScanViewModel =
-        viewModel(
-            factory = ScanViewModelFactory(context.applicationContext),
-        )
     val lifecycleOwner = LocalLifecycleOwner.current
 
     DisposableEffect(Unit) {

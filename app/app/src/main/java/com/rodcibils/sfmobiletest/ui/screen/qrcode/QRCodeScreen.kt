@@ -19,28 +19,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.rodcibils.sfmobiletest.R
 import com.rodcibils.sfmobiletest.ui.common.CustomTopAppBar
 import com.rodcibils.sfmobiletest.util.DateUtils
 import com.rodcibils.sfmobiletest.util.QRCodeBitmapGenerator
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun QRCodeScreen(onBack: (() -> Unit)? = null) {
-    val context = LocalContext.current
-    val viewModel: QRCodeViewModel =
-        viewModel(
-            factory = QRCodeViewModelFactory(context.applicationContext),
-        )
+fun QRCodeScreen(
+    onBack: (() -> Unit)? = null,
+    viewModel: QRCodeViewModel = koinViewModel(),
+) {
     val uiState by viewModel.uiState.collectAsState()
     val qrSeed = (uiState as? QRCodeViewModel.UiState.Success)?.qrCodeSeed
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -145,13 +141,5 @@ fun QRCodeScreen(onBack: (() -> Unit)? = null) {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun QRCodeScreenPreview() {
-    MaterialTheme {
-        QRCodeScreen()
     }
 }

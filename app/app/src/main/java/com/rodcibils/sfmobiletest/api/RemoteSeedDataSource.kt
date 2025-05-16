@@ -13,11 +13,13 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import kotlinx.serialization.Serializable
 
+/**
+ * Handles remote API communication for seed validation and retrieval.
+ *
+ * @param client Ktor HTTP client used for making network requests.
+ */
 class RemoteSeedDataSource(
-    /**
-     * TODO: replace with DI
-     */
-    private val client: HttpClient = HttpClientProvider.client,
+    private val client: HttpClient,
 ) {
     @Serializable
     private data class SeedRequest(val seed: String)

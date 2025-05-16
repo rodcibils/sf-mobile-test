@@ -1,6 +1,5 @@
 package com.rodcibils.sfmobiletest.repo
 
-import android.content.Context
 import com.rodcibils.sfmobiletest.api.RemoteSeedDataSource
 import com.rodcibils.sfmobiletest.local.LocalSeedDataSource
 import com.rodcibils.sfmobiletest.model.QRCodeSeed
@@ -13,18 +12,8 @@ import com.rodcibils.sfmobiletest.model.QRCodeSeed
  * @param remoteSeedDataSource API client for remote seed operations.
  */
 class SeedRepository(
-    /**
-     * TODO: replace with proper DI
-     */
-    context: Context,
-    /**
-     * TODO: replace with proper DI
-     */
-    private val remoteSeedDataSource: RemoteSeedDataSource = RemoteSeedDataSource(),
-    /**
-     * TODO: replace with proper DI
-     */
-    private val localSeedDataSource: LocalSeedDataSource = LocalSeedDataSource(context),
+    private val remoteSeedDataSource: RemoteSeedDataSource,
+    private val localSeedDataSource: LocalSeedDataSource,
 ) {
     /**
      * Checks if the provided seed is valid according to the backend.
