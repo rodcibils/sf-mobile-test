@@ -1,6 +1,7 @@
 package com.rodcibils.sfmobiletest.ui.screen.qrcode
 
 import androidx.lifecycle.ViewModel
+import com.rodcibils.sfmobiletest.model.QRCodeSeed
 import com.rodcibils.sfmobiletest.repo.SeedRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +15,7 @@ class QRCodeViewModel(
     sealed class UiState {
         data object Loading : UiState()
 
-        data class Success(val seed: String) : UiState()
+        data class Success(val qrCodeSeed: QRCodeSeed) : UiState()
 
         data class Error(val message: String) : UiState()
     }
@@ -24,10 +25,9 @@ class QRCodeViewModel(
 
     suspend fun retrieveSeed() {
         _uiState.value = UiState.Loading
-
         try {
-            val seed = repository.retrieveSeed()
-            _uiState.value = UiState.Success(seed)
+            val result = repository.retrieveSeed()
+            _uiState.value = UiState.Success(result)
         } catch (e: Exception) {
             _uiState.value = UiState.Error("Failed to load seed: ${e.localizedMessage}")
         }

@@ -1,5 +1,6 @@
 package com.rodcibils.sfmobiletest.ui.screen.qrcode
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,8 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,6 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.rodcibils.sfmobiletest.R
 import com.rodcibils.sfmobiletest.ui.common.CustomTopAppBar
+import com.rodcibils.sfmobiletest.util.QRCodeBitmapGenerator
 import kotlinx.coroutines.launch
 
 @Composable
@@ -40,6 +44,18 @@ fun QRCodeScreen(
             viewModel.retrieveSeed()
         }
     }
+
+    val (qrBitmap, formattedDate) =
+        remember(uiState) {
+            if (uiState is QRCodeViewModel.UiState.Success) {
+                val seed = (uiState as QRCodeViewModel.UiState.Success).qrCodeSeed
+                val bitmap = QRCodeBitmapGenerator.generate(seed.seed)
+                val formattedDate = seed.getFormattedExpiration()
+                bitmap to formattedDate
+            } else {
+                null to null
+            }
+        }
 
     Scaffold(
         topBar = {
@@ -85,11 +101,18 @@ fun QRCodeScreen(
                 }
 
                 is QRCodeViewModel.UiState.Success -> {
-                    Text(
-                        // TODO: will be replaced with QR Code
-                        text = "Seed: ${state.seed}",
-                        style = MaterialTheme.typography.headlineSmall,
-                    )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        qrBitmap?.let {
+                            Image(bitmap = it.asImageBitmap(), contentDescription = "QR Code")
+                        }
+                        formattedDate?.let {
+                            Text(
+                                text = "Expires at: $it",
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.padding(top = 16.dp),
+                            )
+                        }
+                    }
                 }
             }
         }

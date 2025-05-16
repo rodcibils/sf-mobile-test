@@ -1,6 +1,7 @@
 package com.rodcibils.sfmobiletest.repo
 
 import com.rodcibils.sfmobiletest.api.RemoteSeedDataSource
+import com.rodcibils.sfmobiletest.model.QRCodeSeed
 import kotlinx.coroutines.delay
 
 class SeedRepository(
@@ -16,10 +17,11 @@ class SeedRepository(
      */
     suspend fun isSeedValid(seed: String): Boolean = remoteSeedDataSource.isSeedValid(seed)
 
-    suspend fun retrieveSeed(): String {
+    suspend fun retrieveSeed(): QRCodeSeed {
         delay(2000)
-        // Simulate error or return a hardcoded seed
-        // throw RuntimeException("Server not responding")
-        return "SOME-GENERATED-SEED-123"
+        return QRCodeSeed(
+            seed = "a7c5459eb33d08fbcd87e7de1591bc8a",
+            expiresAt = "2025-05-16T12:51:36.774Z",
+        )
     }
 }
