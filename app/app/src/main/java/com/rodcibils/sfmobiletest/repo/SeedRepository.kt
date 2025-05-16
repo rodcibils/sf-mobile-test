@@ -25,7 +25,7 @@ class SeedRepository(
 
         val expiration =
             Instant.now()
-                .plus(5, ChronoUnit.MINUTES)
+                .plus(10, ChronoUnit.SECONDS)
                 .let { DateTimeFormatter.ISO_INSTANT.format(it) }
 
         return QRCodeSeed(

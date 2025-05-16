@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +28,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.rodcibils.sfmobiletest.R
 import com.rodcibils.sfmobiletest.ui.common.CustomTopAppBar
+import com.rodcibils.sfmobiletest.util.DateUtils
 import com.rodcibils.sfmobiletest.util.QRCodeBitmapGenerator
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Composable
@@ -36,12 +39,35 @@ fun QRCodeScreen(
     viewModel: QRCodeViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val qrSeed = (uiState as? QRCodeViewModel.UiState.Success)?.qrCodeSeed
     val lifecycleOwner = LocalLifecycleOwner.current
+    val refreshJob = remember { mutableStateOf<Job?>(null) }
 
     // Launch retrieveSeed in lifecycleScope when screen is first composed
     LaunchedEffect(Unit) {
         lifecycleOwner.lifecycleScope.launch {
             viewModel.retrieveSeed()
+        }
+    }
+
+    LaunchedEffect(qrSeed?.expiresAt) {
+        qrSeed?.expiresAt?.let { expiresAt ->
+            refreshJob.value?.cancel()
+
+            val delayMillis = DateUtils.getMillisUntilExpiration(expiresAt)
+
+            if (delayMillis <= 0L) {
+                lifecycleOwner.lifecycleScope.launch {
+                    viewModel.retrieveSeed()
+                }
+            } else {
+                val job =
+                    lifecycleOwner.lifecycleScope.launch {
+                        kotlinx.coroutines.delay(delayMillis)
+                        viewModel.retrieveSeed()
+                    }
+                refreshJob.value = job
+            }
         }
     }
 
@@ -91,6 +117,7 @@ fun QRCodeScreen(
                         )
                         Button(onClick = {
                             lifecycleOwner.lifecycleScope.launch {
+                                refreshJob.value?.cancel()
                                 viewModel.retrieveSeed()
                             }
                         }) {
