@@ -45,15 +45,14 @@ fun QRCodeScreen(
         }
     }
 
-    val (qrBitmap, formattedDate) =
+    val qrBitmap =
         remember(uiState) {
             if (uiState is QRCodeViewModel.UiState.Success) {
                 val seed = (uiState as QRCodeViewModel.UiState.Success).qrCodeSeed
                 val bitmap = QRCodeBitmapGenerator.generate(seed.seed)
-                val formattedDate = seed.getFormattedExpiration()
-                bitmap to formattedDate
+                bitmap
             } else {
-                null to null
+                null
             }
         }
 
@@ -105,13 +104,12 @@ fun QRCodeScreen(
                         qrBitmap?.let {
                             Image(bitmap = it.asImageBitmap(), contentDescription = "QR Code")
                         }
-                        formattedDate?.let {
-                            Text(
-                                text = "Expires at: $it",
-                                style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier.padding(top = 16.dp),
-                            )
-                        }
+                        ExpirationCountdown(
+                            expiresAt =
+                                (uiState as QRCodeViewModel.UiState.Success).qrCodeSeed
+                                    .expiresAt,
+                            modifier = Modifier.padding(top = 16.dp),
+                        )
                     }
                 }
             }

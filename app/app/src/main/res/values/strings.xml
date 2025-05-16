@@ -12,4 +12,5 @@
     <string name="invalid_seed_message">❌ Invalid seed: %1$s</string>
     <string name="loading">Loading, please wait…</string>
     <string name="retry">Retry</string>
+    <string name="countdown">%1$s…</string>
 </resources>

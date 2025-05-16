@@ -3,6 +3,9 @@ package com.rodcibils.sfmobiletest.repo
 import com.rodcibils.sfmobiletest.api.RemoteSeedDataSource
 import com.rodcibils.sfmobiletest.model.QRCodeSeed
 import kotlinx.coroutines.delay
+import java.time.Instant
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class SeedRepository(
     /**
@@ -19,9 +22,15 @@ class SeedRepository(
 
     suspend fun retrieveSeed(): QRCodeSeed {
         delay(2000)
+
+        val expiration =
+            Instant.now()
+                .plus(5, ChronoUnit.MINUTES)
+                .let { DateTimeFormatter.ISO_INSTANT.format(it) }
+
         return QRCodeSeed(
             seed = "a7c5459eb33d08fbcd87e7de1591bc8a",
-            expiresAt = "2025-05-16T12:51:36.774Z",
+            expiresAt = expiration,
         )
     }
 }
