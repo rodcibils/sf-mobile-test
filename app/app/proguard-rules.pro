@@ -19,3 +19,57 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#######################################
+# kotlinx.serialization
+#######################################
+-keepclassmembers class ** {
+    @kotlinx.serialization.Serializable *;
+    @kotlinx.serialization.SerialName *;
+    @kotlinx.serialization.Transient *;
+}
+-keepclasseswithmembers class * {
+    @kotlinx.serialization.Serializable *;
+}
+-dontwarn kotlinx.serialization.**
+
+#######################################
+# Ktor (networking)
+#######################################
+-keep class io.ktor.** { *; }
+-dontwarn io.ktor.**
+
+#######################################
+# ZXing (QR Code)
+#######################################
+-keep class com.google.zxing.** { *; }
+-dontwarn com.google.zxing.**
+
+#######################################
+# Koin (Dependency Injection)
+#######################################
+# Koin uses reflection; keep related classes
+-keep class org.koin.** { *; }
+-dontwarn org.koin.**
+
+#######################################
+# Jetpack Compose (UI)
+#######################################
+# Compose is mostly safe with R8, but preserve some metadata
+-keep class androidx.compose.** { *; }
+-dontwarn androidx.compose.**
+
+# Keep Compose compiler metadata
+-keep class **$composer* { *; }
+-keepclassmembers class * {
+    *** Companion;
+}
+
+#######################################
+# General Kotlin / Debug Support
+#######################################
+# Keep line numbers for crash reports
+-keepattributes SourceFile,LineNumberTable
+
+# Optional: show "Unknown Source" instead of real filenames
+#-renamesourcefileattribute SourceFile
